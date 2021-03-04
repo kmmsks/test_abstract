@@ -1,0 +1,111 @@
+---
+pagetitle: "An Abstract of 250 Words and Visuals"
+output:
+  bookdown::html_document2:
+    number_sections : FALSE
+    theme: united
+---
+
+# An Abstract of 250 Words and Visuals {.tabset}
+
+M. Möttönen^a^, V. Virtanen^b^
+
+Affiliations: a: European University; b: World University. <br /> 
+Contact: <mail@example.com>, Homepage: <a href="https://www.google.com/" target="_blank">Möttönen</a>, Twitter: <a href="https://twitter.com/" target="_blank">MottonenM</a>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(bookdown)
+library(ggplot2)
+library(plotly)
+library(gapminder)
+library(DT)
+library(gganimate)
+
+theme_set(theme_bw())
+
+```
+
+## Abstract text
+
+### Introduction
+
+ <a href="https://generator.lorem-ipsum.info/" target="_blank">Lorem ipsum</a> dolor sit amet, noster fastidii est no, facilisi tacimates an ius. Mucius corpora usu at, integre electram ne sit, id legimus legendos vis. Ut quod dignissim mea, quidam lucilius gloriatur his an. Ne quo probo dicat dissentias, sea ferri reque id, augue nulla recteque ne pro. Ne purto praesent postulant vel.
+
+### Methods
+
+Ei eam fabulas repudiare pertinacia, ne illum laoreet fierent mel. At vim paulo suscipiantur, error nominavi recteque an nam. Ne diceret placerat vel, sed eu quod civibus persecuti, ad nihil eripuit vel. Eam summo vocent tibique cu, eu has minim albucius delicatissimi, quis nibh sed at. Duo no invenire interesset, duo ea ludus eirmod nonumes.
+
+Est justo volumus suscipiantur at, in saepe aeterno sea. Sint diceret perpetua ea eam, feugiat vituperatoribus mel id. Sed id etiam accusamus, duo elit dignissim persequeris ad, ius ex errem salutandi definitiones. Possim pertinacia nec id, sed populo referrentur ei, no sed integre menandri.
+
+### Results
+
+Te duis phaedrum democritum vel, dolore insolens mel id. Id alia splendide contentiones usu. An brute referrentur est, ad malorum commune postulant quo, his eu albucius consequat (**Figure 1**). Cu aeque iusto comprehensam vix (**Figure 2**).
+
+Essent debitis neglegentur cu has, aperiam maiorum honestatis cum ad. Numquam facilis salutatus ut sed, ius sale inani referrentur at, no vim praesent euripidis. In putent sensibus constituam pro, et fabellas vulputate qui. Eos zril homero cetero no, ad equidem argumentum efficiendi ius. Ei eam dolorem prodesset dissentiunt (**Table 1**).
+
+### Conclusions
+
+Vix an autem graeco aperiam, utamur accommodare cum ad. Nemore volumus.
+
+<br><br><br>
+
+## Figure 1
+
+### Gapminder Interactive
+
+```{r figInteract}
+p <- gapminder %>%
+  filter(year==1977) %>%
+  ggplot( aes(gdpPercap, lifeExp, size = pop, color=continent)) +
+  geom_point() +
+  labs(caption = "Data source: ToothGrowth")
+
+ggplotly(p)
+```
+
+Source: <https://www.r-graph-gallery.com/interactive-charts.html>
+
+<br><br><br>
+
+## Figure 2
+
+### Gapminder Animation
+
+```{r figAnim}
+p <- ggplot(
+  gapminder, 
+  aes(x = gdpPercap, y=lifeExp, size = pop, colour = country)
+  ) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "Life expectancy")
+
+p + facet_wrap(~continent) +
+  transition_time(year) +
+  labs(title = "Year: {frame_time}")
+
+```
+
+Source:  <https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/>
+
+<br><br><br>
+
+## Table 1
+
+### Top 5 Countrys by Life Expectancy for Each Period
+
+```{r table}
+gapminder <- data.table::copy(gapminder)
+data.table::setDT(gapminder) %>% 
+  .[order(lifeExp), tail(.SD, 5), by = year] %>% 
+  .[order(-year)] %>% 
+  datatable()
+
+```
+
+<br><br><br>
+
